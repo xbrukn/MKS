@@ -29,11 +29,25 @@ int main(void)
 	RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
 	GPIOA->MODER |= GPIO_MODER_MODER5_0;
 
-	
+	static const uint32_t pole[32] = {1,0,1,0,1,0,0,1,1,1,0,1,1,1,0,1,1,1,0,0,1,0,1,0,1,0,0,0,0,0,0,0}; //  data v poli
 
 	while(1)
-	{		
-			GPIOA->ODR ^= (1<<5); // toggle - negování pinu
+	{	
+
+
+		// pro data v poli
+		for(uint8_t i = 0; i < sizeof(pole); i++)
+		{
+			if(pole[i])
+					{
+						GPIOA->BSRR = (1<<5); // nastavit
+					}
+					else
+					{
+						GPIOA->BRR = (1<<5); // reset
+					}
+		 
+			//GPIOA->ODR ^= (1<<5); // toggle - negování pinu
 
 			for (volatile uint32_t j = 0; j < 100000; j++) // wait
 					{
