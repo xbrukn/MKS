@@ -23,6 +23,8 @@ static volatile uint32_t Tick;
 
 #define LED_TIME_BLINK 300 // celočíselná konstanta LED_TIME_BLINK
 #define BUTTON_DEBOUNCE 40
+#define BUTTON_DEBOUNCE_SHORT 5
+#define LED_TIME_50 50
 #define LED_TIME_SHORT 100
 #define LED_TIME_LONG 1000
 
@@ -58,7 +60,8 @@ static volatile uint32_t Tick;
 
 	void tlacitka(void)
 	{
-		static uint32_t debounce1; //musí tady být promněná debounce1??
+		static uint32_t debounce1; //musí tady být promněná debounce1?
+		static uint32_t debounce2;
 		static uint32_t off_time;
 
 		if(Tick > debounce1 + BUTTON_DEBOUNCE) // když se jen Tick porovnává s BUTTON_DEBOUNCE
@@ -71,7 +74,7 @@ static volatile uint32_t Tick;
 
 			if (old_s2 && !new_s2)	// falling edge
 			{
-				off_time = Tick + LED_TIME_SHORT;
+				off_time = Tick + LED_TIME_SHORT; // nastavení na aktuální hodnu + x_ms
 				GPIOB->BSRR = (1<<0);
 			}
 
@@ -81,11 +84,29 @@ static volatile uint32_t Tick;
 				GPIOB->BSRR = (1<<0);
 			}
 
-
 			old_s2 = new_s2;
 			old_s1 = new_s1;
 		}
 
+		if(Tick > debounce2 + BUTTON_DEBOUNCE_SHORT)
+		{
+			static uint16_t debounce = 0xFFFF;
+
+			debounce <<=1;
+			if(GPIOC -> IDR &(1<<1)) debouce |= 0x0001;
+			/*
+			if(debounce == 0x8000)
+			{
+				off_time = Tick + LED_TIME_SHORT;
+				GPIOB->BSRR = (1<<0);
+			}*/
+
+			if(debounce == 0x7FFF)
+			{
+				off_time = Tick + LED_TIME_50;
+				GPIOB->BSRR = (1<<0);
+			}
+		}
 
 		if (Tick > off_time)
 		{
