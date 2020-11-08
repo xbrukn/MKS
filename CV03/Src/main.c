@@ -15,60 +15,24 @@
  *                        opensource.org/licenses/BSD-3-Clause
  *
  ******************************************************************************
- */          
+ */
 
 #include "stm32f0xx.h"
+#include "sct.h"
+
 
 #if !defined(__SOFT_FP__) && defined(__ARM_FP)
   #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
 #endif
 
-int main(void)
-{
 
-	RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
-	GPIOA->MODER |= GPIO_MODER_MODER5_0;
-
-	//static const uint32_t pole[32] = {1,0,1,0,1,0,0,1,1,1,0,1,1,1,0,1,1,1,0,0,1,0,1,0,1,0,0,0,0,0,0,0}; //  data v poli
-
-	while(1)
+	int main(void)
 	{
-
-		uint32_t pole = 0b10101001110111011100101010000000; // binární zápis
-
-		for(uint8_t i = 0; i < 32; i++) // pro binární zápis
+		sct_init();
+		sct_led( 0x7A5C36DE);
+		/* Loop forever */
+		while(1)
 		{
-			//if(pole & (1 << (31-i)))
-			if(pole & 0x80)
-			{
-				GPIOA->BSRR = (1<<5); // set
-			}
-			else
-			{
-				GPIOA->BRR = (1<<5); // reset
-			}
-
-			pole <<= 1;
-
-		/* pro data v poli
-		for(uint8_t i = 0; i < sizeof(pole); i++)
-		{
-			if(pole[i])
-					{
-						GPIOA->BSRR = (1<<5); // nastavit
-					}
-					else
-					{
-						GPIOA->BRR = (1<<5); // reset
-					}
-		 */
-			//GPIOA->ODR ^= (1<<5); // toggle - negování pinu
-
-			for (volatile uint32_t j = 0; j < 100000; j++) // wait
-					{
-
-					}
 
 		}
 	}
-}
