@@ -108,6 +108,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+<<<<<<< HEAD
     /* USER CODE END WHILE */
     /* USER CODE BEGIN 3 */
 
@@ -120,6 +121,17 @@ int main(void)
 
 	  sct_value(__HAL_TIM_GET_COUNTER(&htim1));
 	  HAL_Delay(50);
+=======
+    /* USER CODE END WHILE */	  
+
+    /* USER CODE BEGIN 3 */
+	  
+	for(uint16_t i = 0; i < 1000; i += 111)
+	  {
+	  	sct_value(i);
+	  	HAL_Delay(500);
+	  }
+>>>>>>> 3e5a5f9bc0536c547ee21cc22ff0e925d2c12b7a
   }
   /* USER CODE END 3 */
 }
