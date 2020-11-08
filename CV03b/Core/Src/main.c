@@ -109,8 +109,8 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
     /* USER CODE BEGIN 3 */
+
 	  /*
 	  for(uint16_t i = 0; i < 1000; i += 111)
 	 	  	{
