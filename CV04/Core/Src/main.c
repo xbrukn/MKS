@@ -150,37 +150,38 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-	  static enum { SHOW_POT, SHOW_VOLT, SHOW_TEMP } state = SHOW_POT;
-	  static uint32_t delay;
+	    static enum { SHOW_POT, SHOW_VOLT, SHOW_TEMP } state = SHOW_POT;
+		static uint32_t delay;
 
-	  if (state == SHOW_POT)
-	  {
-		  sct_value(raw_pot * 500/4096, raw_pot * 9/4096);
-	  }
-	  else if(state == SHOW_VOLT)
-	  {
-		  uint32_t voltage = 330 * (*VREFINT_CAL_ADDR) / raw_volt;
+		if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_0))
+		{
+			state == SHOW_VOLT;
+		}
+		else if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_1))
+		{
+			state == SHOW_TEMP;
+		}
 
-		  sct_value(voltage, raw_pot * 9/4096);
-	  }
-	  else if (state == SHOW_TEMP)
-	  {
-		  int32_t temperature = (raw_temp - (int32_t)(*TEMP30_CAL_ADDR));
-		  temperature = temperature * (int32_t)(110 - 30);
-		  temperature = temperature / (int32_t)(*TEMP110_CAL_ADDR - *TEMP30_CAL_ADDR);
-		  temperature = temperature + 30;
+		if (state == SHOW_POT)
+		{
+			sct_value(raw_pot * 500/4096, raw_pot * 9/4096);
+		}
+		else if(state == SHOW_VOLT)
+		{
+			uint32_t voltage = 330 * (*VREFINT_CAL_ADDR) / raw_volt;
 
-		  sct_value(temperature, raw_pot * 9/4096);
-	  }
+			sct_value(voltage, raw_pot * 9/4096);
+		}
+		else if (state == SHOW_TEMP)
+		{
+			int32_t temperature = (raw_temp - (int32_t)(*TEMP30_CAL_ADDR));
+			temperature = temperature * (int32_t)(110 - 30);
+			temperature = temperature / (int32_t)(*TEMP110_CAL_ADDR - *TEMP30_CAL_ADDR);
+			temperature = temperature + 30;
 
-	  if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_0))
-		  {
-		  	  state == SHOW_VOLT;
-		  }
-	  else if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_1))
-		  {
-		  	  state == SHOW_TEMP;
-		  }
+			sct_value(temperature, raw_pot * 9/4096);
+		}
+
 
 	  if(HAL_GetTick() > delay+1000) state == SHOW_POT;
 
